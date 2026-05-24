@@ -731,12 +731,27 @@ const S = {
 const emojis = ['😊','😂','❤️','👍','🔥','💪','🎉','😎','🙏','✨','😍','🤝','👋','😄','💯'];
 let emojiIdx = 0;
 
-// Multiple STUN servers for better connectivity
+// STUN + TURN for NAT traversal on cloud deployments (Render, etc.)
+// Free TURN from Open Relay Project (metered.ca) — works without API key for basic relay
 const ICE_SERVERS = [
   { urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] },
   { urls: 'stun:stun2.l.google.com:19302' },
-  { urls: 'stun:stun3.l.google.com:19302' },
-  { urls: 'stun:stun4.l.google.com:19302' }
+  // Open Relay TURN — UDP + TCP fallback
+  {
+    urls: [
+      'turn:openrelay.metered.ca:80',
+      'turn:openrelay.metered.ca:443',
+      'turn:openrelay.metered.ca:443?transport=tcp'
+    ],
+    username: 'openrelayproject',
+    credential: 'openrelayproject'
+  },
+  // Xirsys free tier fallback
+  {
+    urls: 'turn:relay1.expressturn.com:3478',
+    username: 'efSIGGGU4PFHACJ0UQ',
+    credential: 'YCbKWkqFqHqhiakM'
+  }
 ];
 
 // ═══════════════════════════════════════════════
@@ -867,14 +882,26 @@ async function handleWS(msg) {
     }
 
     case 'call_accept': {
-      // We are the CALLER — peer accepted — we create offer
+      // We are the CALLER — peer accepted — we set up WebRTC and wait for their 'webrtc_ready'
       toast('✅', `${S.peerName} accepted`);
       S.callActive = true;
       S.isInitiator = true;
       startCallTimer();
       document.getElementById('vc-status').textContent = 'Connecting…';
       document.getElementById('vid-status').textContent = 'Connecting…';
-      await setupWebRTC(true); // initiator → creates offer
+      await setupWebRTC(true); // sets up PC + media, but does NOT send offer yet
+      break;
+    }
+
+    case 'webrtc_ready': {
+      // Receiver is ready — now safe to create and send offer
+      if (S.isInitiator && S.pc) {
+        try {
+          const offer = await S.pc.createOffer({ offerToReceiveAudio:true, offerToReceiveVideo: S.callType==='video' });
+          await S.pc.setLocalDescription(offer);
+          send({ type:'offer', sdp:S.pc.localDescription });
+        } catch(e) { console.error('Create offer error:', e); toast('⚠️','Could not start call'); }
+      }
       break;
     }
 
@@ -1296,7 +1323,11 @@ function skipPermission() {
 // GET LOCAL MEDIA
 // ═══════════════════════════════════════════════
 async function getLocalMedia(type) {
-  if (S.localStream) return true;
+  // Always stop and replace stale stream — never reuse a dead stream
+  if (S.localStream) {
+    S.localStream.getTracks().forEach(t => t.stop());
+    S.localStream = null;
+  }
   await showPermModal(type);
   try {
     const constraints = type === 'video'
@@ -1308,6 +1339,17 @@ async function getLocalMedia(type) {
       lv.srcObject = S.localStream;
       lv.onloadedmetadata = () => lv.play().catch(()=>{});
       document.getElementById('vid-self-ph').style.display = 'none';
+    } else {
+      // Audio-only: attach to hidden audio element so it plays on all browsers
+      let audioEl = document.getElementById('local-audio-monitor');
+      if (!audioEl) {
+        audioEl = document.createElement('audio');
+        audioEl.id = 'local-audio-monitor';
+        audioEl.muted = true; // muted to avoid echo — just keeps stream alive
+        audioEl.style.display = 'none';
+        document.body.appendChild(audioEl);
+      }
+      audioEl.srcObject = S.localStream;
     }
     return true;
   } catch(e) {
@@ -1345,12 +1387,48 @@ async function setupWebRTC(isInitiator) {
     S.localStream.getTracks().forEach(t => S.pc.addTrack(t, S.localStream));
   }
 
-  // Remote stream handler
+  // Remote stream handler — robust for mobile autoplay restrictions
   S.pc.ontrack = (e) => {
     if (!e.streams || !e.streams[0]) return;
+    const remoteStream = e.streams[0];
+
+    // Video call: attach to <video> element
     const rv = document.getElementById('remote-video');
-    rv.srcObject = e.streams[0];
-    rv.onloadedmetadata = () => rv.play().catch(()=>{});
+    if (rv) {
+      rv.srcObject = remoteStream;
+      rv.setAttribute('playsinline', '');
+      rv.setAttribute('autoplay', '');
+      // Try play; if blocked (mobile autoplay policy), retry on user gesture
+      const tryPlay = () => rv.play().catch(err => {
+        console.warn('Remote video autoplay blocked, waiting for user gesture:', err);
+        const unlock = () => { rv.play().catch(()=>{}); document.removeEventListener('click', unlock); document.removeEventListener('touchstart', unlock); };
+        document.addEventListener('click', unlock, { once:true });
+        document.addEventListener('touchstart', unlock, { once:true });
+      });
+      rv.onloadedmetadata = tryPlay;
+      if (rv.readyState >= 1) tryPlay();
+    }
+
+    // Audio-only call: always attach stream to a dedicated <audio> element
+    let audioOut = document.getElementById('remote-audio-out');
+    if (!audioOut) {
+      audioOut = document.createElement('audio');
+      audioOut.id = 'remote-audio-out';
+      audioOut.setAttribute('playsinline', '');
+      audioOut.setAttribute('autoplay', '');
+      audioOut.style.display = 'none';
+      document.body.appendChild(audioOut);
+    }
+    audioOut.srcObject = remoteStream;
+    const tryAudio = () => audioOut.play().catch(err => {
+      console.warn('Remote audio autoplay blocked:', err);
+      const unlockAudio = () => { audioOut.play().catch(()=>{}); document.removeEventListener('click', unlockAudio); document.removeEventListener('touchstart', unlockAudio); };
+      document.addEventListener('click', unlockAudio, { once:true });
+      document.addEventListener('touchstart', unlockAudio, { once:true });
+    });
+    audioOut.onloadedmetadata = tryAudio;
+    if (audioOut.readyState >= 1) tryAudio();
+
     document.getElementById('vid-placeholder').style.display = 'none';
     document.getElementById('vc-status').textContent = '✓ Connected';
     document.getElementById('vid-status').textContent = '✓ Connected';
@@ -1383,11 +1461,12 @@ async function setupWebRTC(isInitiator) {
   };
 
   if (isInitiator) {
-    try {
-      const offer = await S.pc.createOffer({ offerToReceiveAudio:true, offerToReceiveVideo: S.callType==='video' });
-      await S.pc.setLocalDescription(offer);
-      send({ type:'offer', sdp:S.pc.localDescription });
-    } catch(e) { console.error('Create offer error:', e); toast('⚠️','Could not start call'); }
+    // Don't send offer yet — wait for receiver's 'webrtc_ready' signal
+    // This prevents the race where offer arrives before receiver finishes getUserMedia
+    console.log('WebRTC ready as initiator — waiting for peer ready signal');
+  } else {
+    // Receiver: signal caller that we're ready to receive the offer
+    send({ type: 'webrtc_ready' });
   }
 }
 
@@ -1494,6 +1573,11 @@ function stopMedia() {
   const lv = document.getElementById('local-video');
   if (rv) { rv.srcObject = null; rv.load(); }
   if (lv) { lv.srcObject = null; lv.load(); }
+  // Clean up dynamically created audio elements
+  const remoteAudio = document.getElementById('remote-audio-out');
+  if (remoteAudio) { remoteAudio.srcObject = null; remoteAudio.load(); }
+  const localAudio = document.getElementById('local-audio-monitor');
+  if (localAudio) { localAudio.srcObject = null; }
   document.getElementById('vid-placeholder').style.display = 'flex';
   document.getElementById('vid-self-ph').style.display = 'flex';
 }
