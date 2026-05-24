@@ -99,6 +99,108 @@ html,body{height:100%;background:#0d0f14;font-family:'DM Sans',sans-serif;color:
 .send-btn:active{transform:scale(.93)}
 .send-btn:disabled{opacity:.35;cursor:not-allowed}
 
+/* FILE & IMAGE SHARING */
+.attach-btn{width:44px;height:44px;border-radius:14px;background:var(--bg3);border:1.5px solid var(--border);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:all .18s}
+.attach-btn:hover{border-color:var(--accent);color:var(--accent)}
+.attach-btn.disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
+
+/* Attach menu */
+.attach-menu{position:absolute;bottom:72px;left:12px;background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:8px;display:none;flex-direction:column;gap:4px;z-index:20;min-width:180px;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.attach-menu.show{display:flex;animation:fadeUp .18s ease}
+.attach-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;transition:background .15s;border:none;background:none;color:var(--text);width:100%;text-align:left}
+.attach-opt:hover{background:var(--bg4)}
+.attach-opt-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+
+/* Upload progress */
+.upload-bubble{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:16px;min-width:200px}
+.mine .upload-bubble{background:linear-gradient(135deg,#4f7cff,#7c5cff);border-bottom-right-radius:4px}
+.theirs .upload-bubble{background:var(--bg3);border:1px solid var(--border);border-bottom-left-radius:4px}
+.upload-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mine .upload-ico{background:rgba(255,255,255,.15)}
+.theirs .upload-ico{background:var(--bg4)}
+.upload-info{flex:1;min-width:0}
+.upload-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mine .upload-name{color:#fff}
+.theirs .upload-name{color:var(--text)}
+.upload-size{font-size:11px;margin-top:2px}
+.mine .upload-size{color:rgba(255,255,255,.65)}
+.theirs .upload-size{color:var(--text2)}
+.upload-bar-wrap{width:100%;height:3px;background:rgba(255,255,255,.2);border-radius:2px;margin-top:6px;overflow:hidden}
+.upload-bar{height:100%;background:#fff;border-radius:2px;transition:width .3s}
+.theirs .upload-bar-wrap{background:var(--bg5)}
+.theirs .upload-bar{background:var(--accent)}
+.dl-btn{background:none;border:none;cursor:pointer;font-size:18px;flex-shrink:0;transition:opacity .15s;padding:2px}
+.mine .dl-btn{color:rgba(255,255,255,.8)}
+.theirs .dl-btn{color:var(--accent)}
+.dl-btn:hover{opacity:.7}
+
+/* Image message */
+.img-bubble{border-radius:14px;overflow:hidden;cursor:pointer;position:relative;max-width:220px}
+.mine .img-bubble{border-bottom-right-radius:4px}
+.theirs .img-bubble{border-bottom-left-radius:4px}
+.img-bubble img{display:block;width:100%;max-height:260px;object-fit:cover}
+.img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.25);opacity:0;transition:opacity .18s;display:flex;align-items:center;justify-content:center;font-size:28px}
+.img-bubble:hover .img-overlay{opacity:1}
+
+/* Image lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.lightbox.show{display:flex;animation:fadeUp .2s ease}
+.lightbox img{max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain}
+.lb-bar{display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px 0 0}
+.lb-name{font-size:13px;color:rgba(255,255,255,.7)}
+.lb-actions{display:flex;gap:10px}
+.lb-btn{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;transition:background .15s}
+.lb-btn:hover{background:rgba(255,255,255,.2)}
+
+/* Drop zone */
+.drop-zone{position:absolute;inset:0;background:rgba(79,124,255,.08);border:2px dashed var(--accent);border-radius:12px;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;pointer-events:none}
+.drop-zone.show{display:flex}
+.drop-zone-ico{font-size:40px}
+.drop-zone-text{font-size:14px;color:var(--accent);font-weight:500}
+
+/* VOICE MESSAGE */
+.mic-btn{width:44px;height:44px;border-radius:14px;background:var(--bg3);border:1.5px solid var(--border);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:all .18s;-webkit-user-select:none;user-select:none;touch-action:none}
+.mic-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mic-btn.disabled{opacity:.35;cursor:not-allowed}
+.mic-btn.recording{background:var(--red);border-color:var(--red);color:#fff;animation:micPulse .8s infinite}
+@keyframes micPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+
+/* Recording overlay */
+.rec-overlay{position:absolute;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);padding:12px 16px;display:none;align-items:center;gap:12px;z-index:10;flex-shrink:0}
+.rec-overlay.show{display:flex}
+.rec-dot{width:10px;height:10px;background:var(--red);border-radius:50%;flex-shrink:0;animation:recBlink 1s infinite}
+@keyframes recBlink{0%,100%{opacity:1}50%{opacity:.2}}
+.rec-timer{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;color:var(--text);min-width:44px}
+.rec-wave{flex:1;height:32px;display:flex;align-items:center;gap:2px;overflow:hidden}
+.rec-bar{width:3px;border-radius:2px;background:var(--accent);min-height:3px;transition:height .1s}
+.rec-hint{font-size:11px;color:var(--text3)}
+.rec-cancel{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:4px 8px;border-radius:8px}
+.rec-cancel:hover{color:var(--red)}
+.rec-send{width:38px;height:38px;border-radius:12px;background:var(--green);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:opacity .18s}
+.rec-send:hover{opacity:.85}
+
+/* Voice message bubble */
+.vmsg-bubble{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:16px;min-width:200px;max-width:100%}
+.mine .vmsg-bubble{background:linear-gradient(135deg,#4f7cff,#7c5cff);border-bottom-right-radius:4px}
+.theirs .vmsg-bubble{background:var(--bg3);border:1px solid var(--border);border-bottom-left-radius:4px}
+.vplay-btn{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:opacity .15s}
+.mine .vplay-btn{background:rgba(255,255,255,.2);color:#fff}
+.theirs .vplay-btn{background:var(--accent);color:#fff}
+.vplay-btn:hover{opacity:.8}
+.vmsg-right{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0}
+.vmsg-waveform{width:100%;height:28px;cursor:pointer;position:relative}
+.vmsg-waveform canvas{width:100%;height:100%}
+.vmsg-progress-wrap{width:100%;height:28px;position:relative;cursor:pointer}
+.vmsg-bars{display:flex;align-items:center;gap:1.5px;height:100%;width:100%}
+.vmsg-bar{border-radius:2px;flex:1;min-height:3px}
+.mine .vmsg-bar{background:rgba(255,255,255,.35)}
+.mine .vmsg-bar.played{background:rgba(255,255,255,.9)}
+.theirs .vmsg-bar{background:var(--border2)}
+.theirs .vmsg-bar.played{background:var(--accent)}
+.vmsg-dur{font-size:10px;opacity:.7;white-space:nowrap}
+.mine .vmsg-dur{color:#fff}
+.theirs .vmsg-dur{color:var(--text2)}
+
 /* BANNERS */
 .dc-banner{background:rgba(255,94,108,.1);border-bottom:1px solid rgba(255,94,108,.2);padding:7px 14px;text-align:center;font-size:12px;color:var(--red);display:none;flex-shrink:0}
 .dc-banner.show{display:block}
@@ -174,6 +276,28 @@ html,body{height:100%;background:#0d0f14;font-family:'DM Sans',sans-serif;color:
 .b-amber{background:rgba(255,183,77,.1);color:var(--amber);border:1px solid rgba(255,183,77,.2)}
 .safety-num{font-family:monospace;font-size:12px;letter-spacing:1px;color:var(--text);background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-top:6px;word-break:break-all;line-height:1.7}
 
+/* DISAPPEARING MESSAGES */
+.dm-banner{background:rgba(124,92,255,.08);border-bottom:1px solid rgba(124,92,255,.15);padding:6px 14px;display:none;align-items:center;gap:7px;font-size:12px;color:#a78bfa;flex-shrink:0}
+.dm-banner.show{display:flex}
+.dm-banner-ico{font-size:13px}
+.dm-timer-picker{position:absolute;top:58px;right:8px;background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:8px;z-index:30;display:none;flex-direction:column;gap:3px;min-width:190px;box-shadow:0 8px 32px rgba(0,0,0,.45)}
+.dm-timer-picker.show{display:flex;animation:fadeUp .18s ease}
+.dm-timer-opt{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;border:none;background:none;color:var(--text);width:100%;transition:background .14s}
+.dm-timer-opt:hover{background:var(--bg4)}
+.dm-timer-opt.active{background:rgba(124,92,255,.12);color:#a78bfa}
+.dm-timer-opt-ico{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+/* Countdown ring on message */
+.msg-expire{display:flex;align-items:center;gap:3px;font-size:10px;color:rgba(255,255,255,.55);margin-left:2px}
+.theirs .msg-expire{color:var(--text3)}
+.expire-ring{width:14px;height:14px;flex-shrink:0}
+.expire-ring circle{fill:none;stroke-width:2;stroke-linecap:round;transform-origin:center;transform:rotate(-90deg)}
+.expire-ring .track{stroke:rgba(255,255,255,.15)}
+.theirs .expire-ring .track{stroke:var(--border2)}
+.expire-ring .prog{stroke:#a78bfa;transition:stroke-dashoffset .5s linear}
+/* Fade out animation */
+@keyframes msgFadeOut{0%{opacity:1;transform:scale(1)}70%{opacity:.3;transform:scale(.97)}100%{opacity:0;transform:scale(.94);max-height:0;margin:0;padding:0}}
+.msg.fading{animation:msgFadeOut .6s ease forwards;pointer-events:none;overflow:hidden}
+
 /* TOAST */
 .toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:10px 16px;font-size:13px;display:none;z-index:200;white-space:nowrap;gap:8px;align-items:center;box-shadow:0 6px 24px rgba(0,0,0,.4);max-width:90vw}
 .toast.show{display:flex;animation:toastIn .25s ease}
@@ -202,6 +326,23 @@ html,body{height:100%;background:#0d0f14;font-family:'DM Sans',sans-serif;color:
   <div class="perm-desc" id="perm-desc">DuoChat needs microphone access for voice calls. Please allow when your browser asks.</div>
   <button class="perm-btn" id="perm-btn" onclick="grantPermission()">Allow Access</button>
   <span class="perm-skip" onclick="skipPermission()">Skip for now</span>
+</div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="file-input-img" accept="image/*,video/*" style="display:none" onchange="handleFileInput(event,'image')">
+<input type="file" id="file-input-doc" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar,.csv" style="display:none" onchange="handleFileInput(event,'doc')">
+<input type="file" id="file-input-any" style="display:none" onchange="handleFileInput(event,'any')">
+
+<!-- Image lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <img id="lb-img" src="" alt="">
+  <div class="lb-bar">
+    <span class="lb-name" id="lb-name"></span>
+    <div class="lb-actions">
+      <button class="lb-btn" onclick="downloadLbImage()" title="Download"><i class="ti ti-download"></i></button>
+      <button class="lb-btn" onclick="closeLightbox()" title="Close"><i class="ti ti-x"></i></button>
+    </div>
+  </div>
 </div>
 
 <!-- INCOMING CALL -->
@@ -249,8 +390,32 @@ html,body{height:100%;background:#0d0f14;font-family:'DM Sans',sans-serif;color:
 
 <!-- CHAT -->
 <div class="screen" id="screen-chat">
+  <!-- Drop zone overlay -->
+  <div class="drop-zone" id="drop-zone">
+    <div class="drop-zone-ico">📎</div>
+    <div class="drop-zone-text">Drop file to send</div>
+  </div>
+  <!-- Attach menu -->
+  <div class="attach-menu" id="attach-menu">
+    <button class="attach-opt" onclick="triggerFileInput('image')">
+      <div class="attach-opt-ico" style="background:rgba(79,124,255,.15)"><i class="ti ti-photo" style="color:var(--accent)"></i></div>
+      Photo or Video
+    </button>
+    <button class="attach-opt" onclick="triggerFileInput('doc')">
+      <div class="attach-opt-ico" style="background:rgba(34,211,160,.12)"><i class="ti ti-file-text" style="color:var(--green)"></i></div>
+      Document
+    </button>
+    <button class="attach-opt" onclick="triggerFileInput('any')">
+      <div class="attach-opt-ico" style="background:rgba(255,183,77,.12)"><i class="ti ti-folder" style="color:var(--amber)"></i></div>
+      Any File
+    </button>
+  </div>
   <div class="dc-banner" id="dc-banner">⚡ Reconnecting…</div>
   <div class="wait-banner" id="wait-banner">⏳ Waiting for your person to join…</div>
+  <div class="dm-banner" id="dm-banner">
+    <span class="dm-banner-ico">⏳</span>
+    <span id="dm-banner-txt">Disappearing messages: Off</span>
+  </div>
   <div class="chat-header">
     <div class="avatar offline" id="peer-av">?</div>
     <div class="hdr-info">
@@ -260,19 +425,54 @@ html,body{height:100%;background:#0d0f14;font-family:'DM Sans',sans-serif;color:
     <div class="hdr-actions">
       <button class="icon-btn" id="btn-vcall" onclick="startCall('voice')" title="Voice call" disabled><i class="ti ti-phone"></i></button>
       <button class="icon-btn" id="btn-vidcall" onclick="startCall('video')" title="Video call" disabled><i class="ti ti-video"></i></button>
+      <button class="icon-btn" id="btn-dm" onclick="toggleDMPicker()" title="Disappearing messages"><i class="ti ti-clock-bolt"></i></button>
       <button class="icon-btn" onclick="showPanel('sec-panel')" title="Security"><i class="ti ti-shield-lock"></i></button>
     </div>
+  </div>
+  <!-- Disappear timer picker -->
+  <div class="dm-timer-picker" id="dm-picker">
+    <div style="font-size:11px;color:var(--text3);padding:4px 12px 6px;font-weight:500;text-transform:uppercase;letter-spacing:.6px">Disappearing Messages</div>
+    <button class="dm-timer-opt active" id="dm-opt-0" onclick="setDMTimer(0)">
+      <div class="dm-timer-opt-ico" style="background:rgba(74,79,104,.3)">🚫</div> Off
+    </button>
+    <button class="dm-timer-opt" id="dm-opt-10" onclick="setDMTimer(10)">
+      <div class="dm-timer-opt-ico" style="background:rgba(255,94,108,.12)">⚡</div> 10 seconds
+    </button>
+    <button class="dm-timer-opt" id="dm-opt-60" onclick="setDMTimer(60)">
+      <div class="dm-timer-opt-ico" style="background:rgba(255,183,77,.12)">⏱️</div> 1 minute
+    </button>
+    <button class="dm-timer-opt" id="dm-opt-300" onclick="setDMTimer(300)">
+      <div class="dm-timer-opt-ico" style="background:rgba(34,211,160,.1)">⏰</div> 5 minutes
+    </button>
+    <button class="dm-timer-opt" id="dm-opt-3600" onclick="setDMTimer(3600)">
+      <div class="dm-timer-opt-ico" style="background:rgba(79,124,255,.12)">🕐</div> 1 hour
+    </button>
+    <button class="dm-timer-opt" id="dm-opt-86400" onclick="setDMTimer(86400)">
+      <div class="dm-timer-opt-ico" style="background:rgba(124,92,255,.12)">📅</div> 24 hours
+    </button>
   </div>
   <div class="messages" id="msg-list">
     <div class="day-sep"><span>Today</span></div>
     <div class="enc-hint"><i class="ti ti-lock" style="font-size:12px"></i>&nbsp;Messages are end-to-end encrypted</div>
   </div>
-  <div class="chat-input">
+  <!-- Recording overlay (shown while recording) -->
+  <div class="rec-overlay" id="rec-overlay">
+    <div class="rec-dot"></div>
+    <div class="rec-timer" id="rec-timer">0:00</div>
+    <div class="rec-wave" id="rec-wave"></div>
+    <button class="rec-cancel" onclick="cancelRecording()"><i class="ti ti-x"></i> Cancel</button>
+    <button class="rec-send" onclick="stopAndSend()" title="Send voice message"><i class="ti ti-send"></i></button>
+  </div>
+  <div class="chat-input" id="chat-input-bar">
     <div class="input-wrap">
       <button class="iico" onclick="insertEmoji()"><i class="ti ti-mood-smile"></i></button>
       <textarea class="msg-area" id="msg-area" placeholder="Message…" rows="1"
         onkeydown="handleKey(event)" oninput="handleInput(this)"></textarea>
     </div>
+    <button class="attach-btn disabled" id="attach-btn" onclick="toggleAttachMenu()" title="Attach file"><i class="ti ti-paperclip"></i></button>
+    <button class="mic-btn disabled" id="mic-btn"
+      onmousedown="startRecording(event)" ontouchstart="startRecording(event)"
+      title="Hold to record voice message"><i class="ti ti-microphone"></i></button>
     <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled><i class="ti ti-send"></i></button>
   </div>
 </div>
@@ -476,10 +676,33 @@ async function handleWS(msg) {
     }
 
     case 'message': {
-      addMsg(msg.fromName, msg.text, 'theirs', msg.ts);
-      // Stop typing indicator
+      addMsg(msg.fromName, msg.text, 'theirs', msg.ts, null, msg.expireIn || 0);
       hideTypingBubble();
       setOnlineStatus();
+      break;
+    }
+
+    case 'voice_message': {
+      hideTypingBubble();
+      setOnlineStatus();
+      addVoiceMsg(msg.audioData, msg.duration, 'theirs', msg.ts, msg.peaks);
+      break;
+    }
+
+    case 'file_share': {
+      hideTypingBubble();
+      setOnlineStatus();
+      addFileMsg(msg.fileData, msg.fileName, msg.fileSize, msg.fileType, 'theirs', msg.ts);
+      break;
+    }
+
+    case 'dm_timer_change': {
+      // Peer changed the disappearing message timer
+      DM.timerSecs = msg.timerSecs;
+      updateDMUI(false);
+      const label = dmLabel(msg.timerSecs);
+      addSystemMsg(`${msg.fromName} set disappearing messages to ${label}`);
+      toast('⏳', `Disappearing messages: ${label}`);
       break;
     }
 
@@ -581,6 +804,10 @@ function setPeerOnline(online) {
     const el = document.getElementById(id);
     if (el) el.disabled = !online;
   });
+  const mb = document.getElementById('mic-btn');
+  if (mb) { mb.classList.toggle('disabled', !online); }
+  const ab = document.getElementById('attach-btn');
+  if (ab) { ab.classList.toggle('disabled', !online); }
 }
 
 function setOnlineStatus() {
@@ -598,13 +825,14 @@ function sendMessage() {
   const text = area.value.trim();
   if (!text || !S.peerOnline) return;
   const id = Date.now().toString();
-  send({ type:'message', id, text });
-  addMsg(S.myName, text, 'mine', Date.now(), id);
+  const expireIn = DM.timerSecs > 0 ? DM.timerSecs : 0;
+  send({ type:'message', id, text, expireIn });
+  addMsg(S.myName, text, 'mine', Date.now(), id, expireIn);
   area.value = ''; area.style.height = 'auto';
   sendTyping(false);
 }
 
-function addMsg(fromName, text, side, ts, msgId) {
+function addMsg(fromName, text, side, ts, msgId, expireIn) {
   const list = document.getElementById('msg-list');
   hideTypingBubble();
   const d = document.createElement('div');
@@ -613,9 +841,11 @@ function addMsg(fromName, text, side, ts, msgId) {
   const t = new Date(ts);
   const time = t.getHours().toString().padStart(2,'0') + ':' + t.getMinutes().toString().padStart(2,'0');
   const tick = side === 'mine' ? `<span class="msg-tick" id="tick-${msgId||''}"><i class="ti ti-check"></i></span>` : '';
-  d.innerHTML = `<div class="bubble">${escHtml(text)}</div><div class="msg-meta"><span class="msg-time">${time}</span>${tick}</div>`;
+  const expireHtml = expireIn > 0 ? buildExpireRing(expireIn) : '';
+  d.innerHTML = `<div class="bubble">${escHtml(text)}</div><div class="msg-meta"><span class="msg-time">${time}</span>${tick}${expireHtml}</div>`;
   list.appendChild(d);
   list.scrollTop = list.scrollHeight;
+  if (expireIn > 0) scheduleExpiry(d, expireIn);
 }
 
 function addSystemMsg(text) {
@@ -1024,8 +1254,675 @@ function resetCallBtns() {
 }
 
 // ═══════════════════════════════════════════════
-// SECURITY
+// VOICE MESSAGES
 // ═══════════════════════════════════════════════
+const VM = {
+  mediaRec: null,
+  chunks: [],
+  stream: null,
+  analyser: null,
+  audioCtx: null,
+  animFrame: null,
+  recSecs: 0,
+  recInterval: null,
+  bars: [],
+  peakData: []  // sampled amplitude peaks for waveform
+};
+
+async function startRecording(e) {
+  e.preventDefault();
+  const mb = document.getElementById('mic-btn');
+  if (mb.classList.contains('disabled')) return;
+  if (!S.peerOnline) return;
+
+  try {
+    VM.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+  } catch(err) {
+    toast('⚠️', 'Microphone access denied');
+    return;
+  }
+
+  // Set up AudioContext for waveform visualisation
+  VM.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  VM.analyser = VM.audioCtx.createAnalyser();
+  VM.analyser.fftSize = 64;
+  const src = VM.audioCtx.createMediaStreamSource(VM.stream);
+  src.connect(VM.analyser);
+
+  // MediaRecorder — pick best supported format
+  const mimeType = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4']
+    .find(m => MediaRecorder.isTypeSupported(m)) || '';
+  VM.mediaRec = new MediaRecorder(VM.stream, mimeType ? { mimeType } : {});
+  VM.chunks = [];
+  VM.peakData = [];
+
+  VM.mediaRec.ondataavailable = (e) => { if (e.data.size > 0) VM.chunks.push(e.data); };
+  VM.mediaRec.start(100);
+
+  // Show recording UI
+  document.getElementById('chat-input-bar').style.display = 'none';
+  document.getElementById('rec-overlay').classList.add('show');
+  mb.classList.add('recording');
+
+  // Timer
+  VM.recSecs = 0;
+  updateRecTimer();
+  VM.recInterval = setInterval(() => {
+    VM.recSecs++;
+    updateRecTimer();
+    // Auto stop at 2 minutes
+    if (VM.recSecs >= 120) stopAndSend();
+  }, 1000);
+
+  // Waveform bars
+  buildRecBars();
+  animateRecWave();
+
+  // Desktop: stop on mouseup anywhere
+  document.addEventListener('mouseup', onRecMouseUp);
+  document.addEventListener('touchend', onRecTouchEnd);
+}
+
+function onRecMouseUp(e) {
+  document.removeEventListener('mouseup', onRecMouseUp);
+  // Only auto-stop if very short tap — show UI for longer holds
+  // We keep recording; user taps Send or Cancel
+}
+function onRecTouchEnd(e) {
+  document.removeEventListener('touchend', onRecTouchEnd);
+}
+
+function updateRecTimer() {
+  const m = Math.floor(VM.recSecs / 60);
+  const s = VM.recSecs % 60;
+  document.getElementById('rec-timer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+function buildRecBars() {
+  const wave = document.getElementById('rec-wave');
+  wave.innerHTML = '';
+  VM.bars = [];
+  for (let i = 0; i < 40; i++) {
+    const b = document.createElement('div');
+    b.className = 'rec-bar';
+    b.style.height = '3px';
+    wave.appendChild(b);
+    VM.bars.push(b);
+  }
+}
+
+function animateRecWave() {
+  if (!VM.analyser) return;
+  const data = new Uint8Array(VM.analyser.frequencyBinCount);
+  VM.analyser.getByteFrequencyData(data);
+
+  // Shift bars left and add new value on right
+  const avg = data.reduce((s,v) => s+v, 0) / data.length;
+  const norm = Math.min(avg / 128, 1);
+  VM.peakData.push(parseFloat(norm.toFixed(3)));
+
+  // Shift bars
+  for (let i = 0; i < VM.bars.length - 1; i++) {
+    VM.bars[i].style.height = VM.bars[i+1].style.height;
+  }
+  const h = Math.max(3, Math.round(norm * 28));
+  VM.bars[VM.bars.length-1].style.height = h + 'px';
+
+  VM.animFrame = requestAnimationFrame(animateRecWave);
+}
+
+function cancelRecording() {
+  stopRecordingCleanup();
+  document.getElementById('chat-input-bar').style.display = 'flex';
+  document.getElementById('rec-overlay').classList.remove('show');
+  toast('🎙️', 'Recording cancelled');
+}
+
+async function stopAndSend() {
+  if (!VM.mediaRec || VM.mediaRec.state === 'inactive') return;
+
+  const duration = VM.recSecs;
+  const peaks = [...VM.peakData];
+
+  await new Promise(resolve => {
+    VM.mediaRec.onstop = resolve;
+    VM.mediaRec.stop();
+  });
+
+  stopRecordingCleanup();
+  document.getElementById('chat-input-bar').style.display = 'flex';
+  document.getElementById('rec-overlay').classList.remove('show');
+
+  if (VM.chunks.length === 0) { toast('⚠️', 'No audio recorded'); return; }
+
+  const blob = new Blob(VM.chunks, { type: VM.mediaRec.mimeType || 'audio/webm' });
+
+  // Convert to base64 to send over WebSocket
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    const base64 = reader.result; // full data URL
+    const ts = Date.now();
+    // Add to own chat immediately
+    addVoiceMsg(base64, duration, 'mine', ts, peaks);
+    // Send to peer
+    send({ type: 'voice_message', audioData: base64, duration, ts, peaks });
+  };
+  reader.readAsDataURL(blob);
+}
+
+function stopRecordingCleanup() {
+  cancelAnimationFrame(VM.animFrame);
+  clearInterval(VM.recInterval);
+  if (VM.stream) { VM.stream.getTracks().forEach(t => t.stop()); VM.stream = null; }
+  if (VM.audioCtx) { VM.audioCtx.close().catch(()=>{}); VM.audioCtx = null; }
+  VM.analyser = null;
+  VM.mediaRec = null;
+  VM.chunks = [];
+  const mb = document.getElementById('mic-btn');
+  if (mb) mb.classList.remove('recording');
+  document.removeEventListener('mouseup', onRecMouseUp);
+  document.removeEventListener('touchend', onRecTouchEnd);
+}
+
+// ── Render a voice message bubble ────────────────
+function addVoiceMsg(audioData, duration, side, ts, peaks) {
+  const list = document.getElementById('msg-list');
+  const t = new Date(ts);
+  const time = t.getHours().toString().padStart(2,'0') + ':' + t.getMinutes().toString().padStart(2,'0');
+  const fmtDur = formatVDur(duration);
+
+  const msgId = 'vm-' + ts + '-' + Math.random().toString(36).slice(2,6);
+
+  const d = document.createElement('div');
+  d.className = 'msg ' + side;
+
+  // Build waveform bars HTML (40 bars)
+  const numBars = 40;
+  const sampledPeaks = samplePeaks(peaks || [], numBars);
+  let barsHtml = '';
+  for (let i = 0; i < numBars; i++) {
+    const h = Math.max(3, Math.round(sampledPeaks[i] * 26));
+    barsHtml += `<div class="vmsg-bar" data-i="${i}" style="height:${h}px"></div>`;
+  }
+
+  const tick = side === 'mine' ? `<span class="msg-tick"><i class="ti ti-check"></i></span>` : '';
+
+  d.innerHTML = `
+    <div class="bubble" style="padding:0">
+      <div class="vmsg-bubble" id="${msgId}">
+        <button class="vplay-btn" onclick="toggleVoicePlay('${msgId}')"><i class="ti ti-player-play"></i></button>
+        <div class="vmsg-right">
+          <div class="vmsg-bars" id="${msgId}-bars" onclick="seekVoice(event,'${msgId}')">${barsHtml}</div>
+          <div class="vmsg-dur" id="${msgId}-dur">${fmtDur}</div>
+        </div>
+      </div>
+    </div>
+    <div class="msg-meta"><span class="msg-time">${time}</span>${tick}</div>`;
+
+  // Store audio data on element
+  d.dataset.audio = audioData;
+  d.dataset.duration = duration;
+  d.dataset.msgId = msgId;
+
+  list.appendChild(d);
+  list.scrollTop = list.scrollHeight;
+}
+
+// ── Audio playback ────────────────────────────────
+const voicePlayers = {}; // msgId -> { audio, interval, playing }
+
+function toggleVoicePlay(msgId) {
+  const el = document.getElementById(msgId);
+  if (!el) return;
+  const msgEl = el.closest('.msg');
+  const audioData = msgEl.dataset.audio;
+  const duration = parseInt(msgEl.dataset.duration) || 0;
+
+  if (!voicePlayers[msgId]) {
+    const audio = new Audio(audioData);
+    audio.onended = () => stopVoicePlay(msgId);
+    audio.onerror = () => { toast('⚠️','Could not play audio'); stopVoicePlay(msgId); };
+    voicePlayers[msgId] = { audio, playing: false, elapsed: 0 };
+  }
+
+  const p = voicePlayers[msgId];
+  if (p.playing) {
+    p.audio.pause();
+    stopVoicePlay(msgId);
+  } else {
+    // Stop any other playing voice
+    Object.keys(voicePlayers).forEach(id => { if (id !== msgId && voicePlayers[id].playing) stopVoicePlay(id); });
+    p.audio.play().catch(() => toast('⚠️','Could not play audio'));
+    p.playing = true;
+    setVPlayBtn(msgId, true);
+    const bars = document.querySelectorAll(`#${msgId}-bars .vmsg-bar`);
+    const numBars = bars.length;
+    p.interval = setInterval(() => {
+      const elapsed = p.audio.currentTime;
+      const total = p.audio.duration || duration || 1;
+      const frac = elapsed / total;
+      const played = Math.round(frac * numBars);
+      bars.forEach((b, i) => b.classList.toggle('played', i < played));
+      document.getElementById(msgId+'-dur').textContent = formatVDur(Math.floor(elapsed));
+    }, 80);
+  }
+}
+
+function stopVoicePlay(msgId) {
+  const p = voicePlayers[msgId];
+  if (!p) return;
+  clearInterval(p.interval);
+  p.playing = false;
+  setVPlayBtn(msgId, false);
+  // Reset bars
+  const bars = document.querySelectorAll(`#${msgId}-bars .vmsg-bar`);
+  bars.forEach(b => b.classList.remove('played'));
+  const msgEl = document.getElementById(msgId)?.closest('.msg');
+  const dur = msgEl ? parseInt(msgEl.dataset.duration)||0 : 0;
+  const durEl = document.getElementById(msgId+'-dur');
+  if (durEl) durEl.textContent = formatVDur(dur);
+}
+
+function seekVoice(e, msgId) {
+  const p = voicePlayers[msgId];
+  if (!p || !p.audio.duration) return;
+  const barsEl = document.getElementById(msgId+'-bars');
+  const rect = barsEl.getBoundingClientRect();
+  const frac = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  p.audio.currentTime = frac * p.audio.duration;
+}
+
+function setVPlayBtn(msgId, playing) {
+  const btn = document.querySelector(`#${msgId} .vplay-btn`);
+  if (btn) btn.innerHTML = playing ? '<i class="ti ti-player-pause"></i>' : '<i class="ti ti-player-play"></i>';
+}
+
+function samplePeaks(peaks, n) {
+  if (!peaks || peaks.length === 0) return Array(n).fill(0.5);
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const idx = Math.floor(i / n * peaks.length);
+    out.push(peaks[idx] || 0.3);
+  }
+  return out;
+}
+
+function formatVDur(secs) {
+  const s = Math.max(0, Math.floor(secs));
+  return Math.floor(s/60) + ':' + (s%60).toString().padStart(2,'0');
+}
+// ═══════════════════════════════════════════════
+
+
+// ═══════════════════════════════════════════════
+// FILE & IMAGE SHARING
+// ═══════════════════════════════════════════════
+
+const MAX_FILE_MB = 10;
+const MAX_FILE_BYTES = MAX_FILE_MB * 1024 * 1024;
+
+// File type helpers
+function getFileIcon(name, type) {
+  if (type.startsWith('image/')) return '🖼️';
+  if (type.startsWith('video/')) return '🎬';
+  if (type.startsWith('audio/')) return '🎵';
+  const ext = name.split('.').pop().toLowerCase();
+  const map = { pdf:'📄', doc:'📝', docx:'📝', xls:'📊', xlsx:'📊', ppt:'📑', pptx:'📑',
+    zip:'🗜️', rar:'🗜️', txt:'📃', csv:'📊', js:'💻', ts:'💻', py:'💻', html:'💻',
+    mp4:'🎬', mov:'🎬', mp3:'🎵', wav:'🎵' };
+  return map[ext] || '📎';
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+  return (bytes/(1024*1024)).toFixed(1) + ' MB';
+}
+
+function isImage(type) { return type.startsWith('image/'); }
+
+// Attach menu toggle
+function toggleAttachMenu() {
+  if (!S.peerOnline) return;
+  const m = document.getElementById('attach-menu');
+  m.classList.toggle('show');
+  // Close when clicking outside
+  if (m.classList.contains('show')) {
+    setTimeout(() => document.addEventListener('click', closeAttachMenuOutside), 10);
+  }
+}
+function closeAttachMenuOutside(e) {
+  const m = document.getElementById('attach-menu');
+  const btn = document.getElementById('attach-btn');
+  if (!m.contains(e.target) && e.target !== btn) {
+    m.classList.remove('show');
+    document.removeEventListener('click', closeAttachMenuOutside);
+  }
+}
+
+function triggerFileInput(kind) {
+  document.getElementById('attach-menu').classList.remove('show');
+  document.removeEventListener('click', closeAttachMenuOutside);
+  if (kind === 'image') document.getElementById('file-input-img').click();
+  else if (kind === 'doc') document.getElementById('file-input-doc').click();
+  else document.getElementById('file-input-any').click();
+}
+
+function handleFileInput(e, kind) {
+  const file = e.target.files[0];
+  e.target.value = ''; // reset so same file can be re-selected
+  if (file) processFile(file);
+}
+
+// Drag & drop
+function initDragDrop() {
+  const chat = document.getElementById('screen-chat');
+  const zone = document.getElementById('drop-zone');
+  let dragCount = 0;
+
+  chat.addEventListener('dragenter', (e) => {
+    e.preventDefault();
+    if (!S.peerOnline) return;
+    dragCount++;
+    zone.classList.add('show');
+  });
+  chat.addEventListener('dragleave', () => {
+    dragCount--;
+    if (dragCount <= 0) { dragCount = 0; zone.classList.remove('show'); }
+  });
+  chat.addEventListener('dragover', (e) => { e.preventDefault(); });
+  chat.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dragCount = 0;
+    zone.classList.remove('show');
+    if (!S.peerOnline) { toast('⚠️','Partner is offline'); return; }
+    const file = e.dataTransfer.files[0];
+    if (file) processFile(file);
+  });
+}
+
+// Core: read file, show preview if image, then send
+function processFile(file) {
+  if (file.size > MAX_FILE_BYTES) {
+    toast('⚠️', `File too large. Max ${MAX_FILE_MB} MB`);
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const fileData = e.target.result; // base64 data URL
+    const ts = Date.now();
+    // Show in own chat
+    addFileMsg(fileData, file.name, file.size, file.type, 'mine', ts);
+    // Send to peer
+    send({
+      type: 'file_share',
+      fileData,
+      fileName: file.name,
+      fileSize: file.size,
+      fileType: file.type,
+      ts
+    });
+  };
+  reader.onerror = () => toast('⚠️', 'Could not read file');
+  reader.readAsDataURL(file);
+  toast('📤', `Sending ${file.name}…`);
+}
+
+// Render a file/image message bubble
+function addFileMsg(fileData, fileName, fileSize, fileType, side, ts) {
+  const list = document.getElementById('msg-list');
+  hideTypingBubble();
+
+  const t = new Date(ts);
+  const time = t.getHours().toString().padStart(2,'0') + ':' + t.getMinutes().toString().padStart(2,'0');
+  const tick = side === 'mine' ? `<span class="msg-tick"><i class="ti ti-check"></i></span>` : '';
+  const msgId = 'fm-' + ts + '-' + Math.random().toString(36).slice(2,5);
+
+  const d = document.createElement('div');
+  d.className = 'msg ' + side;
+  d.dataset.fileData = fileData;
+  d.dataset.fileName = fileName;
+  d.dataset.fileType = fileType;
+
+  if (isImage(fileType)) {
+    // Image bubble with thumbnail
+    d.innerHTML = `
+      <div class="img-bubble" onclick="openLightbox('${msgId}')">
+        <img id="${msgId}-img" src="${fileData}" alt="${escHtml(fileName)}" loading="lazy">
+        <div class="img-overlay"><i class="ti ti-zoom-in" style="color:#fff;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))"></i></div>
+      </div>
+      <div class="msg-meta"><span class="msg-time">${time}</span>${tick}</div>`;
+    d.dataset.imgId = msgId;
+  } else {
+    // File bubble
+    const icon = getFileIcon(fileName, fileType);
+    const sizeStr = formatFileSize(fileSize);
+    d.innerHTML = `
+      <div class="bubble" style="padding:0">
+        <div class="upload-bubble" id="${msgId}">
+          <div class="upload-ico">${icon}</div>
+          <div class="upload-info">
+            <div class="upload-name" title="${escHtml(fileName)}">${escHtml(fileName)}</div>
+            <div class="upload-size">${sizeStr}</div>
+          </div>
+          <button class="dl-btn" onclick="downloadFile('${msgId}')" title="Download">
+            <i class="ti ti-download"></i>
+          </button>
+        </div>
+      </div>
+      <div class="msg-meta"><span class="msg-time">${time}</span>${tick}</div>`;
+  }
+
+  list.appendChild(d);
+  list.scrollTop = list.scrollHeight;
+}
+
+// Download a file
+function downloadFile(msgId) {
+  const bubble = document.getElementById(msgId);
+  const msgEl = bubble ? bubble.closest('.msg') : null;
+  if (!msgEl) return;
+  const data = msgEl.dataset.fileData;
+  const name = msgEl.dataset.fileName;
+  const a = document.createElement('a');
+  a.href = data;
+  a.download = name;
+  a.click();
+}
+
+// Lightbox for images
+let lbCurrentData = null, lbCurrentName = null;
+
+function openLightbox(msgId) {
+  const d = document.querySelector(`[data-img-id="${msgId}"]`);
+  if (!d) return;
+  lbCurrentData = d.dataset.fileData;
+  lbCurrentName = d.dataset.fileName;
+  document.getElementById('lb-img').src = lbCurrentData;
+  document.getElementById('lb-name').textContent = lbCurrentName;
+  document.getElementById('lightbox').classList.add('show');
+}
+
+function closeLightbox(e) {
+  if (!e || e.target === document.getElementById('lightbox') || e.target.closest('.lb-btn[onclick*="close"]')) {
+    document.getElementById('lightbox').classList.remove('show');
+  }
+}
+
+function downloadLbImage() {
+  if (!lbCurrentData) return;
+  const a = document.createElement('a');
+  a.href = lbCurrentData;
+  a.download = lbCurrentName || 'image';
+  a.click();
+}
+
+// Paste images from clipboard
+document.addEventListener('paste', (e) => {
+  if (!S.peerOnline) return;
+  const items = e.clipboardData?.items;
+  if (!items) return;
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      const file = item.getAsFile();
+      if (file) { processFile(new File([file], 'pasted-image.png', { type: file.type })); }
+      break;
+    }
+  }
+});
+
+// Init drag-drop on page load
+document.addEventListener('DOMContentLoaded', initDragDrop);
+// Also init immediately in case DOM is already ready
+if (document.readyState !== 'loading') initDragDrop();
+
+// ═══════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════
+// DISAPPEARING MESSAGES
+// ═══════════════════════════════════════════════
+
+const DM = {
+  timerSecs: 0,   // 0 = off
+  activeTimers: new Map() // msgEl -> { intervalId, remaining, total }
+};
+
+const DM_OPTIONS = [0, 10, 60, 300, 3600, 86400];
+
+function dmLabel(secs) {
+  if (!secs) return 'Off';
+  if (secs < 60) return secs + ' seconds';
+  if (secs < 3600) return (secs / 60) + ' minute' + (secs === 60 ? '' : 's');
+  if (secs < 86400) return (secs / 3600) + ' hour' + (secs === 3600 ? '' : 's');
+  return '24 hours';
+}
+
+function toggleDMPicker() {
+  const picker = document.getElementById('dm-picker');
+  picker.classList.toggle('show');
+  if (picker.classList.contains('show')) {
+    setTimeout(() => document.addEventListener('click', closeDMPickerOutside), 10);
+  }
+}
+
+function closeDMPickerOutside(e) {
+  const picker = document.getElementById('dm-picker');
+  const btn = document.getElementById('btn-dm');
+  if (!picker.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+    picker.classList.remove('show');
+    document.removeEventListener('click', closeDMPickerOutside);
+  }
+}
+
+function setDMTimer(secs) {
+  DM.timerSecs = secs;
+  document.getElementById('dm-picker').classList.remove('show');
+  document.removeEventListener('click', closeDMPickerOutside);
+  updateDMUI(true);
+  // Notify peer
+  if (S.peerOnline) {
+    send({ type: 'dm_timer_change', timerSecs: secs });
+  }
+  addSystemMsg(`Disappearing messages set to ${dmLabel(secs)}`);
+  toast('⏳', `Disappearing: ${dmLabel(secs)}`);
+}
+
+function updateDMUI(isSelf) {
+  const secs = DM.timerSecs;
+  const banner = document.getElementById('dm-banner');
+  const bannerTxt = document.getElementById('dm-banner-txt');
+  const dmBtn = document.getElementById('btn-dm');
+
+  // Update banner
+  if (secs > 0) {
+    bannerTxt.textContent = `Disappearing messages: ${dmLabel(secs)}`;
+    banner.classList.add('show');
+    if (dmBtn) { dmBtn.style.color = '#a78bfa'; dmBtn.style.borderColor = 'rgba(124,92,255,.4)'; }
+  } else {
+    banner.classList.remove('show');
+    if (dmBtn) { dmBtn.style.color = ''; dmBtn.style.borderColor = ''; }
+  }
+
+  // Update picker active state (only if self changed it)
+  if (isSelf) {
+    DM_OPTIONS.forEach(opt => {
+      const el = document.getElementById('dm-opt-' + opt);
+      if (el) el.classList.toggle('active', opt === secs);
+    });
+  }
+}
+
+// Build the SVG countdown ring HTML
+function buildExpireRing(totalSecs) {
+  const r = 5, circ = 2 * Math.PI * r;
+  return `<span class="msg-expire">
+    <svg class="expire-ring" viewBox="0 0 14 14">
+      <circle class="track" cx="7" cy="7" r="${r}" stroke-dasharray="${circ}" stroke-dashoffset="0"/>
+      <circle class="prog" cx="7" cy="7" r="${r}" stroke-dasharray="${circ}" stroke-dashoffset="0"/>
+    </svg>
+    <span class="expire-txt">${formatExpireLabel(totalSecs)}</span>
+  </span>`;
+}
+
+function formatExpireLabel(secs) {
+  if (secs <= 0) return '';
+  if (secs < 60) return secs + 's';
+  if (secs < 3600) return Math.ceil(secs / 60) + 'm';
+  if (secs < 86400) return Math.ceil(secs / 3600) + 'h';
+  return '24h';
+}
+
+// Schedule a message to auto-delete with countdown
+function scheduleExpiry(msgEl, totalSecs) {
+  let remaining = totalSecs;
+  const circ = 2 * Math.PI * 5;
+
+  function tick() {
+    if (!msgEl.isConnected) { clearInfo(); return; }
+    remaining--;
+    const frac = remaining / totalSecs;
+    // Update ring progress
+    const prog = msgEl.querySelector('.expire-ring .prog');
+    if (prog) prog.setAttribute('stroke-dashoffset', circ * (1 - frac));
+    // Update label
+    const txt = msgEl.querySelector('.expire-txt');
+    if (txt) txt.textContent = formatExpireLabel(remaining);
+    // Change colour as time runs low
+    if (prog) {
+      if (remaining <= 10) prog.style.stroke = 'var(--red)';
+      else if (remaining <= 30) prog.style.stroke = 'var(--amber)';
+    }
+    if (remaining <= 0) {
+      clearInfo();
+      deleteMessage(msgEl);
+    }
+  }
+
+  const intervalId = setInterval(tick, 1000);
+  DM.activeTimers.set(msgEl, { intervalId, remaining, total: totalSecs });
+
+  function clearInfo() {
+    clearInterval(intervalId);
+    DM.activeTimers.delete(msgEl);
+  }
+}
+
+function deleteMessage(msgEl) {
+  msgEl.classList.add('fading');
+  setTimeout(() => {
+    if (msgEl.isConnected) msgEl.remove();
+  }, 650);
+}
+
+// Clear all active timers (e.g. on disconnect)
+function clearAllExpireTimers() {
+  for (const [, info] of DM.activeTimers) clearInterval(info.intervalId);
+  DM.activeTimers.clear();
+}
+
+// ═══════════════════════════════════════════════
+
 function updateSecurityUI() {
   if (S.roomHash) {
     document.getElementById('room-hash-display').textContent = S.roomHash.match(/.{1,4}/g).join(' ').toUpperCase();

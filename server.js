@@ -73,6 +73,9 @@ wss.on('connection', (ws) => {
       case 'offer':
       case 'answer':
       case 'ice_candidate':
+      case 'voice_message':
+      case 'file_share':
+      case 'dm_timer_change':
       case 'call_request':
       case 'call_accept':
       case 'call_reject':
