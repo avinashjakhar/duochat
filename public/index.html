@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DuoChat — Private Encrypted Messenger</title>
+<title>Calculator</title>
 
 <!-- PWA Manifest -->
 <link rel="manifest" href="/manifest.json">
 
 <!-- Theme & status bar -->
-<meta name="theme-color" content="#4f7cff">
+<meta name="theme-color" content="#1c1c1e">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="application-name" content="DuoChat">
+<meta name="application-name" content="Calculator">
 
 <!-- iOS PWA support -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="DuoChat">
+<meta name="apple-mobile-web-app-title" content="Calculator">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png">
 <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png">
@@ -362,6 +362,25 @@ html,body{height:100%;background:#0d0f14;font-family:'DM Sans',sans-serif;color:
 .ios-step-text{font-size:13.5px;color:var(--text2);line-height:1.55}
 .ios-step-text strong{color:var(--text)}
 .ios-close{background:var(--bg4);border:none;border-radius:12px;padding:12px;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;width:100%;margin-top:4px}
+/* ===================== CALCULATOR DECOY ===================== */
+#screen-calc{background:#1c1c1e;align-items:stretch;justify-content:flex-end}
+.calc-display{flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:12px 24px 8px;min-height:0}
+.calc-history{font-size:20px;color:rgba(255,255,255,.35);text-align:right;min-height:28px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px;letter-spacing:-0.3px}
+.calc-expr{font-size:22px;color:rgba(255,255,255,.55);text-align:right;min-height:30px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px}
+.calc-result{font-size:68px;font-weight:200;color:#fff;text-align:right;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-2px;transition:font-size .1s}
+.calc-result.small{font-size:42px}
+.calc-result.secret-flash{color:#4f7cff !important;animation:secretFlash .5s ease}
+@keyframes secretFlash{0%,100%{opacity:1}50%{opacity:.3}}
+.calc-secret-hint{font-size:11px;color:rgba(255,255,255,.18);text-align:right;padding:0 4px;min-height:16px;transition:opacity .3s}
+.calc-keypad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:12px 16px 28px;flex-shrink:0}
+.ck{border:none;border-radius:50%;aspect-ratio:1;font-size:28px;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity .12s,filter .12s;-webkit-tap-highlight-color:transparent;user-select:none}
+.ck:active{opacity:.6}
+.ck.fn {background:#a5a5a5;color:#000}
+.ck.op {background:#ff9f0a;color:#fff;font-size:32px}
+.ck.op.active-op{background:#fff;color:#ff9f0a}
+.ck.num{background:#333335;color:#fff}
+.ck.zero{border-radius:100px;justify-content:flex-start;padding-left:30px;grid-column:span 2}
+.ck.eq {background:#ff9f0a;color:#fff;font-size:32px}
 </style>
 </head>
 <body>
@@ -414,8 +433,44 @@ html,body{height:100%;background:#0d0f14;font-family:'DM Sans',sans-serif;color:
   </div>
 </div>
 
-<!-- LOGIN -->
-<div class="screen active" id="screen-login">
+<!-- CALCULATOR (decoy — replaces login) -->
+<div class="screen active" id="screen-calc">
+  <div class="calc-display">
+    <div class="calc-history" id="calc-history"></div>
+    <div class="calc-expr" id="calc-expr"></div>
+    <div class="calc-result" id="calc-result">0</div>
+    <div class="calc-secret-hint" id="calc-hint"></div>
+  </div>
+  <div class="calc-keypad">
+    <!-- Row 1 -->
+    <button class="ck fn" onclick="calcFn('AC')">AC</button>
+    <button class="ck fn" onclick="calcFn('+/-')">+/−</button>
+    <button class="ck fn" onclick="calcFn('%')">%</button>
+    <button class="ck op" id="op-div" onclick="calcOp('÷')">÷</button>
+    <!-- Row 2 -->
+    <button class="ck num" onclick="calcNum('7')">7</button>
+    <button class="ck num" onclick="calcNum('8')">8</button>
+    <button class="ck num" onclick="calcNum('9')">9</button>
+    <button class="ck op" id="op-mul" onclick="calcOp('×')">×</button>
+    <!-- Row 3 -->
+    <button class="ck num" onclick="calcNum('4')">4</button>
+    <button class="ck num" onclick="calcNum('5')">5</button>
+    <button class="ck num" onclick="calcNum('6')">6</button>
+    <button class="ck op" id="op-sub" onclick="calcOp('−')">−</button>
+    <!-- Row 4 -->
+    <button class="ck num" onclick="calcNum('1')">1</button>
+    <button class="ck num" onclick="calcNum('2')">2</button>
+    <button class="ck num" onclick="calcNum('3')">3</button>
+    <button class="ck op" id="op-add" onclick="calcOp('+')">+</button>
+    <!-- Row 5 -->
+    <button class="ck num zero" onclick="calcNum('0')">0</button>
+    <button class="ck num" onclick="calcDot()">.</button>
+    <button class="ck eq" onclick="calcEquals()">=</button>
+  </div>
+</div>
+
+<!-- LOGIN (hidden — shown after secret code) -->
+<div class="screen" id="screen-login">
   <div class="login-inner">
     <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
       <div class="logo-mark">🔐</div>
@@ -852,6 +907,221 @@ async function handleWS(msg) {
 }
 
 // ═══════════════════════════════════════════════
+// CALCULATOR DECOY + SECRET CODE UNLOCK
+// ═══════════════════════════════════════════════
+
+// SECRET CODE: type this on the calculator then press = to reveal DuoChat
+// Default: 1379= (users can change it in localStorage)
+const DEFAULT_SECRET = '1379';
+function getSecret() { return localStorage.getItem('dc-secret') || DEFAULT_SECRET; }
+
+const C = {
+  display: '0',
+  expr: '',
+  history: '',
+  op: null,
+  prev: null,
+  justEvaled: false,
+  sequence: '',   // tracks digit sequence for secret detection
+  waitingOp: false
+};
+
+function calcReset() {
+  C.display = '0'; C.expr = ''; C.history = '';
+  C.op = null; C.prev = null; C.justEvaled = false;
+  C.sequence = ''; C.waitingOp = false;
+  renderCalc();
+  document.getElementById('calc-hint').textContent = '';
+  // Reset op buttons
+  ['div','mul','sub','add'].forEach(id => {
+    const b = document.getElementById('op-'+id);
+    if (b) b.classList.remove('active-op');
+  });
+}
+
+function renderCalc() {
+  const res = document.getElementById('calc-result');
+  const expr = document.getElementById('calc-expr');
+  const hist = document.getElementById('calc-history');
+  res.textContent = C.display;
+  expr.textContent = C.expr;
+  hist.textContent = C.history;
+  // Shrink font if number is long
+  res.className = 'calc-result' + (C.display.length > 9 ? ' small' : '');
+}
+
+function calcNum(n) {
+  // Track digit sequence for secret code detection
+  if (!C.waitingOp) {
+    C.sequence += n;
+  } else {
+    C.sequence = n;
+    C.waitingOp = false;
+  }
+  checkSecret();
+
+  if (C.justEvaled) {
+    C.display = n; C.expr = ''; C.history = ''; C.justEvaled = false;
+  } else if (C.display === '0') {
+    C.display = n;
+  } else {
+    if (C.display.replace('-','').length >= 12) return;
+    C.display += n;
+  }
+  renderCalc();
+  updateACBtn();
+}
+
+function calcDot() {
+  C.sequence = ''; // dot breaks secret sequence
+  if (C.justEvaled) { C.display = '0.'; C.justEvaled = false; renderCalc(); return; }
+  if (!C.display.includes('.')) { C.display += '.'; renderCalc(); }
+}
+
+function calcOp(op) {
+  C.waitingOp = true;
+  C.sequence = '';
+  const opMap = { '÷':'div', '×':'mul', '−':'sub', '+':'add' };
+
+  // Deactivate all, activate current
+  ['div','mul','sub','add'].forEach(id => document.getElementById('op-'+id)?.classList.remove('active-op'));
+  document.getElementById('op-'+opMap[op])?.classList.add('active-op');
+
+  if (C.op && !C.justEvaled) {
+    // Chain operation: evaluate first
+    const result = evalOp(parseFloat(C.prev), parseFloat(C.display), C.op);
+    C.display = formatResult(result);
+    C.history = C.display;
+  } else {
+    C.prev = C.display;
+    C.history = C.display;
+  }
+  C.expr = C.history + ' ' + op;
+  C.op = op;
+  C.justEvaled = false;
+  renderCalc();
+}
+
+function calcEquals() {
+  // Check secret code on =
+  const secret = getSecret();
+  if (C.sequence === secret || C.display === secret) {
+    unlockDuoChat();
+    return;
+  }
+
+  if (!C.op || C.prev === null) {
+    C.justEvaled = true;
+    C.expr = ''; C.history = C.display;
+    renderCalc();
+    return;
+  }
+
+  const a = parseFloat(C.prev);
+  const b = parseFloat(C.display);
+  const result = evalOp(a, b, C.op);
+  C.history = C.prev + ' ' + C.op + ' ' + C.display + ' =';
+  C.display = formatResult(result);
+  C.expr = '';
+  C.op = null; C.prev = null;
+  C.justEvaled = true;
+  C.sequence = '';
+
+  ['div','mul','sub','add'].forEach(id => document.getElementById('op-'+id)?.classList.remove('active-op'));
+  renderCalc();
+}
+
+function evalOp(a, b, op) {
+  switch(op) {
+    case '+': return a + b;
+    case '−': return a - b;
+    case '×': return a * b;
+    case '÷': return b === 0 ? 'Error' : a / b;
+  }
+  return b;
+}
+
+function formatResult(val) {
+  if (val === 'Error') return 'Error';
+  if (!isFinite(val)) return 'Error';
+  // Round floating point noise
+  const rounded = parseFloat(val.toPrecision(12));
+  const str = rounded.toString();
+  // Use exponential for very large/small
+  if (str.length > 12) return rounded.toExponential(6);
+  return str;
+}
+
+function calcFn(fn) {
+  C.sequence = '';
+  if (fn === 'AC') { calcReset(); return; }
+  if (fn === '+/-') {
+    if (C.display !== '0' && C.display !== 'Error') {
+      C.display = C.display.startsWith('-') ? C.display.slice(1) : '-' + C.display;
+      renderCalc();
+    }
+    return;
+  }
+  if (fn === '%') {
+    const v = parseFloat(C.display);
+    if (!isNaN(v)) { C.display = formatResult(v / 100); renderCalc(); }
+    return;
+  }
+}
+
+function updateACBtn() {
+  // Switch AC ↔ C
+  const acBtn = document.querySelector('.ck.fn');
+  if (acBtn) acBtn.textContent = C.display !== '0' ? 'C' : 'AC';
+}
+
+function checkSecret() {
+  const secret = getSecret();
+  const seq = C.sequence;
+  const hint = document.getElementById('calc-hint');
+  // If sequence starts matching, show subtle progress dots
+  if (secret.startsWith(seq) && seq.length > 0 && seq.length < secret.length) {
+    hint.textContent = '•'.repeat(seq.length) + '◦'.repeat(secret.length - seq.length);
+  } else if (seq.length >= secret.length && !secret.startsWith(seq)) {
+    hint.textContent = '';
+    C.sequence = seq.slice(-secret.length); // keep only last N digits
+  } else {
+    hint.textContent = '';
+  }
+}
+
+function unlockDuoChat() {
+  const res = document.getElementById('calc-result');
+  res.classList.add('secret-flash');
+  res.textContent = '🔐';
+  setTimeout(() => {
+    res.classList.remove('secret-flash');
+    calcReset();
+    showScreen('screen-login');
+  }, 600);
+}
+
+// Keyboard support for calculator
+document.addEventListener('keydown', (e) => {
+  const active = document.getElementById('screen-calc');
+  if (!active.classList.contains('active')) return;
+  if (e.key >= '0' && e.key <= '9') calcNum(e.key);
+  else if (e.key === '.') calcDot();
+  else if (e.key === '+') calcOp('+');
+  else if (e.key === '-') calcOp('−');
+  else if (e.key === '*') calcOp('×');
+  else if (e.key === '/') { e.preventDefault(); calcOp('÷'); }
+  else if (e.key === '%') calcFn('%');
+  else if (e.key === 'Enter' || e.key === '=') calcEquals();
+  else if (e.key === 'Backspace') {
+    if (C.display.length > 1) { C.display = C.display.slice(0,-1); C.sequence = C.sequence.slice(0,-1); }
+    else { C.display = '0'; C.sequence = ''; }
+    renderCalc();
+  }
+  else if (e.key === 'Escape') calcReset();
+});
+
+// ═══════════════════════════════════════════════
 // LOGIN
 // ═══════════════════════════════════════════════
 function joinRoom() {
@@ -867,6 +1137,16 @@ function joinRoom() {
   S.myName = name; S.roomKey = key;
   connect(name, key);
   showScreen('screen-chat');
+}
+
+function logoutToCalc() {
+  // Disconnect WS, reset state, go back to calculator
+  if (S.ws) { S.ws.onclose = null; S.ws.close(); S.ws = null; }
+  S.myName = null; S.roomKey = null; S.userId = null;
+  S.peerOnline = false; S.peerId = null; S.peerName = null;
+  stopCallTimer(); stopMedia();
+  showScreen('screen-calc');
+  calcReset();
 }
 
 // ═══════════════════════════════════════════════
